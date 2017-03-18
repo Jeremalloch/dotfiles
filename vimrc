@@ -13,11 +13,11 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins from Github (format is user/repo)
 Plugin 'tpope/vim-fugitive' " Git plugin
 Plugin 'altercation/vim-colors-solarized' " Colour scheme plugin
-Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
+Plugin 'powerline/powerline' " Powerline on the bottom of vim editing window
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
+Plugin 'davidhalter/jedi-vim' " Autocomplete plugin
 Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
-Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 " vim-scripts repos
 Bundle 'L9'
@@ -51,9 +51,9 @@ set hlsearch            " highlight matches
 nnoremap <leader><space> :nohlsearch<CR> 
 
 " Folding Settings
-" set foldenable          " enable folding
-" set foldlevelstart=10   " open most folds by default
-" set foldmethod=indent   " Folding level is determined by indentation
+set foldenable          " enable folding
+set foldlevelstart=10   " open most folds by default
+set foldmethod=indent   " Folding level is determined by indentation
 " space open/closes folds
 nnoremap <space> za
 
@@ -61,8 +61,16 @@ nnoremap <space> za
 " move vertically by visual line, so on long lines, don't miss
 nnoremap j gj
 nnoremap k gk
+" move to beginning/end of line
+nnoremap B ^
+nnoremap E $
+" $/^ doesn't do anything
+nnoremap $ <nop>
+nnoremap ^ <nop>
 " highlight last inserted text
 nnoremap gV `[v`]
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Settings for syntastic, the linter
 set statusline+=%#warningmsg#
