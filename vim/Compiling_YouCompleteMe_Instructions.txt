@@ -1,4 +1,0 @@
-https://stackoverflow.com/questions/40108521/difficulty-with-python-while-installing-youcompleteme-in-vim
-
-
-/usr/bin/python ./install.py --clang-completer
