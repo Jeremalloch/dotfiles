@@ -84,7 +84,8 @@ set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
 " turn off search highlight with ,
 nnoremap <leader><space> :nohlsearch<CR> 
-set wildignore+=*/.git/*,*/tmp/*,*.swp " Tell vim to ignore these files }}}
+set wildignore+=*/.git/*,*/tmp/*,*.swp " Tell vim to ignore these files
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR> " K searches for word under key }}}
 
 " AutoGroups {{{
 augroup configgroup
@@ -190,5 +191,3 @@ endfunc
 "}}}
 
 " vim:foldmethod=marker:foldlevel=0
-
-" Inspired by https://dougblack.io/words/a-good-vimrc.html#ui
