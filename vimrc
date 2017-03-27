@@ -18,9 +18,9 @@ Plugin 'tpope/vim-fugitive' " Git plugin
 Plugin 'altercation/vim-colors-solarized' " Colour scheme plugin
 Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
-Plugin 'vim-syntastic/syntastic' " Linter for various languages
+" Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
-" Plugin 'Valloric/YouCompleteMe' " Autocompletion
+Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
 
@@ -41,6 +41,7 @@ set modelines=1
 filetype indent on
 filetype plugin on
 set autoindent
+set backspace=indent,eol,start " Make sure backspace works properly
 " }}}
 
 " UI & Colourscheme {{{
@@ -98,6 +99,7 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
     autocmd BufEnter *.py setlocal tabstop=4
+    " Filetype python nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
     autocmd BufEnter *.md setlocal ft=markdown
 augroup END
 " }}}
@@ -173,8 +175,8 @@ set writebackup
 " }}}
 
 " YouCompleteMeSettings {{{
-" Make sure You complete me uses right python
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+" Make sure YouCompleteMe uses the right python version
+" let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 let g:ycm_python_binary_path = 'python'
 " }}}
 
