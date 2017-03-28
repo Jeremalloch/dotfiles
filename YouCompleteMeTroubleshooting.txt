@@ -1,0 +1,2 @@
+Helpful tutorial for OSX making sure the same version of python is used for vim & youcompleteme
+http://www.oschrenk.com/vim-youcompleteme-and-python/

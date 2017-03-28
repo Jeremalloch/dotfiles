@@ -17,7 +17,9 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive' " Git plugin
 Plugin 'altercation/vim-colors-solarized' " Colour scheme plugin
 Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
+Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
+Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
 " Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
@@ -137,33 +139,46 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 nnoremap <leader>n :NERDTreeToggle<CR>
 " }}}
 
-" Syntastic {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
+" NERDCommenter {{{
 
-let g:syntastic_error_symbol = '❌'
-let g:syntastic_style_error_symbol = '⁉️'
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
+let g:NERDSpaceDelims = 1 " Add spaces after comment delimiters by default
+let g:NERDCompactSexyComs = 1 " Use compact syntax for prettified multi-line comments
+let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
 " }}}
 
-" Vim airline statu bar settings {{{
+" Syntastic {{{
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 1
+"
+" let g:syntastic_error_symbol = '❌'
+" let g:syntastic_style_error_symbol = '⁉️'
+" let g:syntastic_warning_symbol = '⚠️'
+" let g:syntastic_style_warning_symbol = '💩'
+"
+" highlight link SyntasticErrorSign SignColumn
+" highlight link SyntasticWarningSign SignColumn
+" highlight link SyntasticStyleErrorSign SignColumn
+" highlight link SyntasticStyleWarningSign SignColumn
+"
+" let g:syntastic_python_checkers=['pylint']
+" }}}
+
+" Vim Airline {{{
 set laststatus=2
 set ttimeoutlen=50
 let g:airline_left_sep = ''
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_right_sep = ''
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'badwolf'
 " }}}
 
 " Save Vim backups in a more convenient place {{{
@@ -176,8 +191,12 @@ set writebackup
 
 " YouCompleteMeSettings {{{
 " Make sure YouCompleteMe uses the right python version
-" let g:ycm_path_to_python_interpreter = '/usr/bin/python'
-let g:ycm_python_binary_path = 'python'
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_min_num_identifier_candidate_chars = 3
+" let g:ycm_python_binary_path = 'python'
 " }}}
 
 " Functions {{{
