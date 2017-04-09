@@ -26,13 +26,18 @@ Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
 
+" Haskell
+Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plugin 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plugin 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plugin 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on
+syntax enable " enabling syntax processing
 " End of Vundle code
 " }}}
-
-syntax enable " enabling syntax processing
 
 " Tabs and spaces settings {{{
 set tabstop=4 " Tabs are 4 spaces
@@ -48,9 +53,9 @@ set backspace=indent,eol,start " Make sure backspace works properly
 
 " UI & Colourscheme {{{
 set relativenumber	" Show the number of lines above and below cursor line
+set number
 set background=dark
 let g:solarized_termcolors=256
-" set termguicolors
 colorscheme solarized " Use solarized colourscheme
 set showcmd " Show the command being entered in the bottom
 set wildmenu " Visual autocomplete for vim commands
@@ -69,6 +74,10 @@ nnoremap <space> za
 " move vertically by visual line, so on long lines, don't miss
 nnoremap j gj
 nnoremap k gk
+nnoremap gj 25j
+nnoremap gk 25k
+set scrolloff=3                 " Keep at least 3 lines above/below
+set sidescrolloff=3             " Keep at least 3 lines left/right
 " highlight last inserted text
 nnoremap gV `[v`]
 " }}}
@@ -80,11 +89,19 @@ nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>s :mksession<CR>
+nnoremap <leader>l :call ToggleNumber() " Switch between absolute and relative line number
+" }}}
+
+" Split Opening Behaviour {{{
+set splitbelow                  " Horizontal split below
+set splitright                  " Vertical split right
 " }}}
 
 " Search settings {{{
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
+set ignorecase                  " Case-insensitive search
+set smartcase                   " Unless search contains uppercase letter
 " turn off search highlight with ,
 nnoremap <leader><space> :nohlsearch<CR> 
 set wildignore+=*/.git/*,*/tmp/*,*.swp " Tell vim to ignore these files
@@ -191,13 +208,35 @@ set writebackup
 
 " YouCompleteMeSettings {{{
 " Make sure YouCompleteMe uses the right python version
+nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_server_keep_logfiles = 1
+" let g:ycm_server_keep_logfiles = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_min_num_identifier_candidate_chars = 3
-" let g:ycm_python_binary_path = 'python'
-" }}}
+" let g:ycm_min_num_identifier_candidate_chars = 1
+" let g:ycm_always_populate_location_list = 0
+let g:ycm_auto_trigger=0
+" let g:ycm_enable_diagnostic_highlighting=1
+" let g:ycm_enable_diagnostic_signs=1
+" let g:ycm_max_diagnostics_to_display=10000
+" let g:ycm_open_loclist_on_ycm_diags=1
+" let g:ycm_show_diagnostics_ui=1
+" let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:ycm_filetype_blacklist={
+            " \ 'vim' : 1,
+            " \ 'tagbar' : 1,
+            " \ 'qf' : 1,
+            " \ 'notes' : 1,
+            " \ 'markdown' : 1,
+            " \ 'md' : 1,
+            " \ 'unite' : 1,
+            " \ 'text' : 1,
+            " \ 'vimwiki' : 1,
+            " \ 'pandoc' : 1,
+            " \ 'infolog' : 1,
+            " \ 'mail' : 1
+            " \}
+" " }}}
 
 " Functions {{{
 " toggle between number and relativenumber
