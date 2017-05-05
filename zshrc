@@ -25,9 +25,8 @@ export EDITOR='vim'
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"# Aliases
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
-alias clr='clear; pwd; ls -F'
+alias clr='clear; ls -F'
 alias gtkk='git lg -10'
-alias zshconfig="vim ~/.zshrc"
 eval "$(pyenv init -)"
 
 # Set the theme and default user name
@@ -37,13 +36,11 @@ DEFAULT_USER="Jeremy Malloch"
 plugins=(git colored-man colorize pip python brew osx zsh-syntax-highlighting common-aliases)
 
 # Export paths
-export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
-export GOROOT=/usr/local/opt/go/libexec
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
+export PATH="$HOME/Library/Haskell/bin:$PATH"
 
 # User configuration
 source $ZSH/oh-my-zsh.sh
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

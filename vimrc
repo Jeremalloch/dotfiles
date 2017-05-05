@@ -1,4 +1,7 @@
 " Jeremy Malloch
+"
+" TODO: switch to vim.plug so different plugins can be used for different
+" programs (eg Haskell vs C vs Python)
 
 " Plugins (with Vundle) {{{
 " Start of Vundle settings
@@ -20,7 +23,7 @@ Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
 Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
 Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
-" Plugin 'vim-syntastic/syntastic' " Linter for various languages
+Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
@@ -31,6 +34,8 @@ Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plugin 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plugin 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plugin 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+Plugin 'Shougo/vimproc.vim'
+let $PATH = $PATH . ':' . expand('~/Library/Haskell/bin') " Allow ghc-mod to be discovered
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -151,8 +156,8 @@ let g:ctrlp_working_path_mode = 0
 
 " NERDTree {{{
 " If no file specified, enter NERDTree on vim startup
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 nnoremap <leader>n :NERDTreeToggle<CR>
 " }}}
 
@@ -166,25 +171,34 @@ let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace wh
 " }}}
 
 " Syntastic {{{
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 1
-"
+map <Leader>s :SyntasticToggleMode<CR>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
 " let g:syntastic_error_symbol = '❌'
 " let g:syntastic_style_error_symbol = '⁉️'
 " let g:syntastic_warning_symbol = '⚠️'
 " let g:syntastic_style_warning_symbol = '💩'
-"
+
 " highlight link SyntasticErrorSign SignColumn
 " highlight link SyntasticWarningSign SignColumn
 " highlight link SyntasticStyleErrorSign SignColumn
 " highlight link SyntasticStyleWarningSign SignColumn
-"
-" let g:syntastic_python_checkers=['pylint']
+
+let g:syntastic_python_checkers=['pylint']
+" }}}
+
+" ghc-mod {{{
+map <silent> tw :GhcModTypeInsert<CR>
+map <silent> ts :GhcModSplitFunCase<CR>
+map <silent> tq :GhcModType<CR>
+map <silent> te :GhcModTypeClear<CR>
 " }}}
 
 " Vim Airline {{{
@@ -196,6 +210,7 @@ let g:airline_right_sep = ''
 let g:airline_right_sep = ''
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'badwolf'
+let g:airline_powerline_fonts = 1
 " }}}
 
 " Save Vim backups in a more convenient place {{{
@@ -211,17 +226,15 @@ set writebackup
 nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-" let g:ycm_server_keep_logfiles = 1
+let g:ycm_min_num_of_chars_for_completion = 0
+let g:ycm_server_keep_logfiles = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:ycm_min_num_identifier_candidate_chars = 1
-" let g:ycm_always_populate_location_list = 0
-let g:ycm_auto_trigger=0
-" let g:ycm_enable_diagnostic_highlighting=1
-" let g:ycm_enable_diagnostic_signs=1
-" let g:ycm_max_diagnostics_to_display=10000
-" let g:ycm_open_loclist_on_ycm_diags=1
-" let g:ycm_show_diagnostics_ui=1
-" let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_min_num_identifier_candidate_chars = 1
+let g:ycm_enable_diagnostic_highlighting=1
+let g:ycm_enable_diagnostic_signs=1
+let g:ycm_open_loclist_on_ycm_diags=1
+let g:ycm_show_diagnostics_ui=1
+let g:ycm_collect_identifiers_from_tags_files = 1
 " let g:ycm_filetype_blacklist={
             " \ 'vim' : 1,
             " \ 'tagbar' : 1,
