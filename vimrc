@@ -29,6 +29,10 @@ Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
 
+" Latex Plugins
+Plugin 'LaTeX-Box-Team/LaTeX-Box' " Latex plugin
+Plugin 'brennier/quicktex'  " Quick complete
+
 " Haskell
 Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plugin 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
@@ -194,6 +198,26 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pylint']
 " }}}
 
+" quicktex (latex) {{{
+let g:quicktex_tex = {
+    \' '   : "\<ESC>/<+.*+>\<CR>\"_c/+>/e\<CR>",
+    \'m'   : '\( <+++> \) <++>',
+    \'prf' : "\\begin{proof}\<CR><+++>\<CR>\\end{proof}",
+\}
+
+let g:quicktex_math = {
+    \' '    : "\<ESC>/<+.*+>\<CR>\"_c/+>/e\<CR>",
+    \'fr'   : '\mathcal{R} ',
+    \'eq'   : '= ',
+    \'set'  : '\{ <+++> \} <++>',
+    \'frac' : '\frac{<+++>}{<++>} <++>',
+    \'one'  : '1 ',
+    \'st'   : ': ',
+    \'in'   : '\in ',
+    \'bn'   : '\mathbb{N} ',
+\}
+" }}}
+
 " ghc-mod {{{
 map <silent> tw :GhcModTypeInsert<CR>
 map <silent> ts :GhcModSplitFunCase<CR>
@@ -224,7 +248,7 @@ set writebackup
 " YouCompleteMeSettings {{{
 " Make sure YouCompleteMe uses the right python version
 nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible
-let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+let g:ycm_path_to_python_interpreter = '/Users/jeremymalloch/.pyenv/shims/python2'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_min_num_of_chars_for_completion = 0
 let g:ycm_server_keep_logfiles = 1
