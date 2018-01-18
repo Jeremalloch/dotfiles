@@ -30,8 +30,8 @@ Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
 
 " Latex Plugins
-Plugin 'LaTeX-Box-Team/LaTeX-Box' " Latex plugin
-Plugin 'brennier/quicktex'  " Quick complete
+Plugin 'lervag/vimtex'
+" Plugin 'brennier/quicktex'  " Quick complete
 
 " Haskell
 Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
@@ -81,21 +81,22 @@ nnoremap <space> za
 
 " Movement settings {{{
 " move vertically by visual line, so on long lines, don't miss
-nnoremap j gj
-nnoremap k gk
+" nnoremap j gj
+" nnoremap k gk
 nnoremap gj 25j
 nnoremap gk 25k
 set scrolloff=3                 " Keep at least 3 lines above/below
 set sidescrolloff=3             " Keep at least 3 lines left/right
 " highlight last inserted text
 nnoremap gV `[v`]
+set mouse=a
 " }}}
 
 " Leader shortcuts {{{
 let mapleader="," " leader is comma
 nnoremap <leader>u :GundoToggle<CR>
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>ev :tabnew $MYVIMRC<CR>
+nnoremap <leader>ez :tabnew ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>s :mksession<CR>
 nnoremap <leader>l :call ToggleNumber() " Switch between absolute and relative line number
@@ -198,24 +199,13 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pylint']
 " }}}
 
-" quicktex (latex) {{{
-let g:quicktex_tex = {
-    \' '   : "\<ESC>/<+.*+>\<CR>\"_c/+>/e\<CR>",
-    \'m'   : '\( <+++> \) <++>',
-    \'prf' : "\\begin{proof}\<CR><+++>\<CR>\\end{proof}",
-\}
-
-let g:quicktex_math = {
-    \' '    : "\<ESC>/<+.*+>\<CR>\"_c/+>/e\<CR>",
-    \'fr'   : '\mathcal{R} ',
-    \'eq'   : '= ',
-    \'set'  : '\{ <+++> \} <++>',
-    \'frac' : '\frac{<+++>}{<++>} <++>',
-    \'one'  : '1 ',
-    \'st'   : ': ',
-    \'in'   : '\in ',
-    \'bn'   : '\mathbb{N} ',
-\}
+" vimtex (LaTeX) {{{
+let g:vimtex_view_method = 'skim' " Set PDF viewer
+" Use YouCompleteMe for autocompletion
+if !exists('g:ycm_semantic_triggers')
+    let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 " }}}
 
 " ghc-mod {{{
