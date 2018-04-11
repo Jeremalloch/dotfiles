@@ -28,6 +28,7 @@ Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
+Plugin 'vim-scripts/indentpython.vim' " Better python indentation
 
 " Latex Plugins
 Plugin 'lervag/vimtex'
@@ -48,11 +49,16 @@ syntax enable " enabling syntax processing
 " End of Vundle code
 " }}}
 
+" System Settings {{{
+set clipboard=unnamed
+" }}}
+
 " Tabs and spaces settings {{{
 set tabstop=4 " Tabs are 4 spaces
 set expandtab " When a tab is inserted, 4 spaces are inserted in lieu of the tab
 set softtabstop=4   " number of spaces in tab when editing
 set shiftwidth=4 " Shifting with << or >> will only be 4 spaces
+setlocal textwidth=79
 set modelines=1
 filetype indent on
 filetype plugin on
@@ -99,12 +105,13 @@ nnoremap <leader>ev :tabnew $MYVIMRC<CR>
 nnoremap <leader>ez :tabnew ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>s :mksession<CR>
-nnoremap <leader>l :call ToggleNumber() " Switch between absolute and relative line number
+nnoremap <leader>rl :call ToggleNumber()<CR> " Switch between absolute and relative line number
 " }}}
 
-" Split Opening Behaviour {{{
+" Opening new Buffer Behaviour {{{
 set splitbelow                  " Horizontal split below
 set splitright                  " Vertical split right
+set switchbuf+=usetab,newtab
 " }}}
 
 " Search settings {{{
@@ -127,7 +134,6 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal tabstop=2
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
-    autocmd BufEnter *.py setlocal tabstop=4
     " Filetype python nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
     autocmd BufEnter *.md setlocal ft=markdown
 augroup END
@@ -157,6 +163,8 @@ endif
 let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = '*.o'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard'] "Ignore files in gitignore
 " }}}
 
 " NERDTree {{{
@@ -176,7 +184,7 @@ let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace wh
 " }}}
 
 " Syntastic {{{
-map <Leader>s :SyntasticToggleMode<CR>
+map <Leader>ts :SyntasticToggleMode<CR>
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -185,11 +193,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-
-" let g:syntastic_error_symbol = '❌'
-" let g:syntastic_style_error_symbol = '⁉️'
-" let g:syntastic_warning_symbol = '⚠️'
-" let g:syntastic_style_warning_symbol = '💩'
 
 " highlight link SyntasticErrorSign SignColumn
 " highlight link SyntasticWarningSign SignColumn
@@ -267,14 +270,28 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 
 " Functions {{{
 " toggle between number and relativenumber
-function! ToggleNumber()
+func! ToggleNumber()
     if(&relativenumber == 1)
         set norelativenumber
         set number
     else
         set relativenumber
     endif
-endfunc
+endfu
+com! TN call ToggleNumber()
+
+" Word Processing Mode - English spell check
+func! WordProcessorMode()
+ setlocal textwidth=80
+ setlocal spell spelllang=en_us
+ setlocal noexpandtab
+ setlocal colorcolumn=80
+endfu
+com! WP call WordProcessorMode()
 "}}}
 
+" Git (Fugitive) Settings {{{
+nnoremap <leader>gb :Gblame<CR>
+" }}}
+"
 " vim:foldmethod=marker:foldlevel=0
