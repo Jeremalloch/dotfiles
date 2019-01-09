@@ -88,6 +88,7 @@ nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
 nnoremap <leader>ez :tabnew ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 nnoremap <leader>s :mksession<CR>
 nnoremap <leader>rl :call ToggleNumber()<CR> " Switch between absolute and relative line number
 " }}}
