@@ -1,8 +1,5 @@
 " Jeremy Malloch
 "
-" TODO: switch to vim.plug so different plugins can be used for different
-" programs (eg Haskell vs C vs Python)
-
 " Plugins (with Vundle) {{{
 " Start of Vundle settings
 set nocompatible              " be iMproved, instead of backwards compatible (with vi)
@@ -23,24 +20,11 @@ Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
 Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
 Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
-Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
 Plugin 'sjl/gundo.vim' " Vim undo tree visualization
 Plugin 'vim-scripts/indentpython.vim' " Better python indentation
-
-" Latex Plugins
-Plugin 'lervag/vimtex'
-" Plugin 'brennier/quicktex'  " Quick complete
-
-" Haskell
-Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plugin 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plugin 'eagletmt/neco-ghc', { 'for': 'haskell' }
-Plugin 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
-Plugin 'Shougo/vimproc.vim'
-let $PATH = $PATH . ':' . expand('~/Library/Haskell/bin') " Allow ghc-mod to be discovered
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -183,32 +167,12 @@ let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (us
 let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
 " }}}
 
-" Syntastic {{{
-map <Leader>ts :SyntasticToggleMode<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-" highlight link SyntasticErrorSign SignColumn
-" highlight link SyntasticWarningSign SignColumn
-" highlight link SyntasticStyleErrorSign SignColumn
-" highlight link SyntasticStyleWarningSign SignColumn
-
-let g:syntastic_python_checkers=['pylint']
-" }}}
-
 " vimtex (LaTeX) {{{
 let g:vimtex_view_method = 'skim' " Set PDF viewer
 " Use YouCompleteMe for autocompletion
 if !exists('g:ycm_semantic_triggers')
     let g:ycm_semantic_triggers = {}
 endif
-let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 " }}}
 
 " ghc-mod {{{
@@ -241,7 +205,7 @@ set writebackup
 " YouCompleteMeSettings {{{
 " Make sure YouCompleteMe uses the right python version
 nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible
-let g:ycm_path_to_python_interpreter = '/Users/jeremymalloch/.pyenv/shims/python2'
+" let g:ycm_path_to_python_interpreter = '/Users/jeremymalloch/.pyenv/shims/python2'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_min_num_of_chars_for_completion = 0
 let g:ycm_server_keep_logfiles = 1

@@ -1,5 +1,6 @@
+ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jeremymalloch/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -28,13 +29,12 @@ alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 alias clr='clear; ls -F'
 alias gtkk='git lg -10'
 alias g++14="clang -std=c++14 -Wall -g -v"
-eval "$(pyenv init -)"
 
 # Set the theme and default user name
 ZSH_THEME=agnoster
 DEFAULT_USER="Jeremy Malloch"
 
-plugins=(git colored-man colorize pip python brew osx zsh-syntax-highlighting common-aliases)
+plugins=(git colored-man colorize pip python brew osx common-aliases)
 
 # Export paths
 export PATH="$HOME/Library/Haskell/bin:$PATH"
@@ -43,12 +43,4 @@ export PATH="$HOME/Library/Haskell/bin:$PATH"
 source $ZSH/oh-my-zsh.sh
 alias tmux="TERM=screen-256color-bce tmux"
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jeremymalloch/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jeremymalloch/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jeremymalloch/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jeremymalloch/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
