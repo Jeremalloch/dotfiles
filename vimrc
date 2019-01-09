@@ -23,7 +23,6 @@ Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
 Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
 Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
 Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
-Plugin 'vim-syntastic/syntastic' " Linter for various languages
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
@@ -104,6 +103,7 @@ nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
 nnoremap <leader>ez :tabnew ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 nnoremap <leader>s :mksession<CR>
 nnoremap <leader>rl :call ToggleNumber()<CR> " Switch between absolute and relative line number
 " }}}
@@ -182,17 +182,6 @@ let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left 
 let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
 " }}}
-
-" Syntastic {{{
-map <Leader>ts :SyntasticToggleMode<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
 
 " highlight link SyntasticErrorSign SignColumn
 " highlight link SyntasticWarningSign SignColumn

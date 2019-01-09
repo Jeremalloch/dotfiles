@@ -42,6 +42,7 @@ export PATH="$HOME/Library/Haskell/bin:$PATH"
 # User configuration
 source $ZSH/oh-my-zsh.sh
 alias tmux="TERM=screen-256color-bce tmux"
+alias g++14="g++ -std=c++14 -Wall"
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
