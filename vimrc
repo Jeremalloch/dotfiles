@@ -31,7 +31,6 @@ Plugin 'vim-scripts/indentpython.vim' " Better python indentation
 
 " Latex Plugins
 Plugin 'lervag/vimtex'
-" Plugin 'brennier/quicktex'  " Quick complete
 
 " Haskell
 Plugin 'Twinside/vim-hoogle', { 'for': 'haskell' }
@@ -181,14 +180,6 @@ let g:NERDCompactSexyComs = 1 " Use compact syntax for prettified multi-line com
 let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
-" }}}
-
-" highlight link SyntasticErrorSign SignColumn
-" highlight link SyntasticWarningSign SignColumn
-" highlight link SyntasticStyleErrorSign SignColumn
-" highlight link SyntasticStyleWarningSign SignColumn
-
-let g:syntastic_python_checkers=['pylint']
 " }}}
 
 " vimtex (LaTeX) {{{

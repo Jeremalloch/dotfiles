@@ -8,7 +8,8 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="env.sh vimrc zshrc oh-my-zsh ycm_extra_conf.py"    # list of files/folders to symlink in homedir
+files="env.sh vimrc zshrc oh-my-zsh ycm_extra_conf.py gitconfig
+gitignore_global tmux.conf"    # list of files/folders to symlink in homedir
 
 ##########
 

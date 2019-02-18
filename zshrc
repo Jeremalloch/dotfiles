@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jeremymalloch/.oh-my-zsh
+export ZSH=${HOME}/.oh-my-zsh
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -24,7 +24,6 @@ export EDITOR='vim'
 
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"# Aliases
-alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 alias clr='clear; ls -F'
 alias gtkk='git lg -10'
 alias g++14="clang -std=c++14 -Wall -g -v"
@@ -46,10 +45,4 @@ alias g++14="g++ -std=c++14 -Wall"
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jeremymalloch/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jeremymalloch/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jeremymalloch/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jeremymalloch/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
