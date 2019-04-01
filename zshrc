@@ -18,6 +18,13 @@ export LANG=en_US.UTF-8
 # Preferred editor for local and remote sessions
 export EDITOR='vim'
 
+# Export for building PDK etc
+export PDK_ROOT="${HOME}/pdk/pdk.latest"
+export TSDK_ROOT="${PDK_ROOT}"
+export TSDK_HOST_ROOT="${TSDK_ROOT}/x86_64-apple-darwin"
+export TITAN_TOOLCHAIN_DIR="${TSDK_HOST_ROOT}/usr"
+export TSDK_TOS_SYSROOT="${TSDK_ROOT}/sysroot/arm64-apple-titanos"
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -36,12 +43,14 @@ DEFAULT_USER="Jeremy Malloch"
 
 plugins=(git colored-man colorize pip python brew osx common-aliases)
 
-# Export paths
-export PATH="$HOME/Library/Haskell/bin:$PATH"
-
 # User configuration
 source $ZSH/oh-my-zsh.sh
 alias tmux="TERM=screen-256color-bce tmux"
 alias g++14="g++ -std=c++14 -Wall"
+#
+# Command for TensorX build
+alias cmaket="/Users/test/pdk/pdk.latest/x86_64-apple-darwin/usr/bin/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/Users/test/pdk/pdk.latest/x86_64-apple-darwin/toolchain.cmake -DCMAKE_INSTALL_PREFIX=/Users/test/pdk/pdk.latest/sysroot/arm64-apple-titanos/usr .."
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/opt/opencv@2/bin:$PATH"

@@ -23,7 +23,8 @@ Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
 Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
 Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
-Plugin 'sjl/gundo.vim' " Vim undo tree visualization
+" Plugin 'sjl/gundo.vim' " Vim undo tree visualization
+Plugin 'mbbill/undotree' " Vim undo tree visualization
 Plugin 'vim-scripts/indentpython.vim' " Better python indentation
 
 " All of your Plugins must be added before the following line
@@ -63,7 +64,7 @@ set lazyredraw " Vim won't redraw the screen as often
 
 " Folding Settings {{{
 set foldenable          " enable folding
-set foldlevelstart=10   " open most folds by default
+set foldlevelstart=99   " open most folds by default
 set foldmethod=indent   " Folding level is determined by indentation
 " space open/closes folds
 nnoremap <space> za
@@ -71,10 +72,8 @@ nnoremap <space> za
 
 " Movement settings {{{
 " move vertically by visual line, so on long lines, don't miss
-" nnoremap j gj
-" nnoremap k gk
-nnoremap gj 25j
-nnoremap gk 25k
+" nnoremap <leader>jj <CR>L zt<CR>
+" nnoremap <leader>k <CR>H zb<CR>
 set scrolloff=3                 " Keep at least 3 lines above/below
 set sidescrolloff=3             " Keep at least 3 lines left/right
 " highlight last inserted text
@@ -84,13 +83,20 @@ set mouse=a
 
 " Leader shortcuts {{{
 let mapleader="," " leader is comma
-nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
 nnoremap <leader>ez :tabnew ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 nnoremap <leader>s :mksession<CR>
 nnoremap <leader>rl :call ToggleNumber()<CR> " Switch between absolute and relative line number
+" }}}
+
+" UndoTree Settings {{{
+nnoremap <leader>u :UndotreeToggle<CR>
+if has("persistent_undo")
+    set undodir=$HOME."/.undodir"
+    set undofile
+endif
 " }}}
 
 " Opening new Buffer Behaviour {{{
@@ -105,7 +111,7 @@ set hlsearch            " highlight matches
 set ignorecase                  " Case-insensitive search
 set smartcase                   " Unless search contains uppercase letter
 " turn off search highlight with ,
-nnoremap <leader><space> :nohlsearch<CR> 
+nnoremap <leader><space> :nohlsearch<CR>
 set wildignore+=*/.git/*,*/tmp/*,*.swp " Tell vim to ignore these files
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR> " K searches for word under key }}}
 
@@ -131,13 +137,13 @@ if executable('rg')
     set grepformat=%f:%l:%c:%m
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
     let g:ctrlp_use_caching = 0
-    nnoremap <leader>g :rg
+    nnoremap <leader>g :vimgrep
 elseif executable('ag')
     set grepprg=ag\ --vimgrep\ --ignore=\"**.min.js\"
     set grepformat=%f:%l:%c:%m,%f:%l:%m
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
-    nnoremap <leader>g :Ag
+    nnoremap <leader>g :!Ag
 elseif executable('ack')
     set grepprg=ack\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -168,21 +174,6 @@ let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (us
 let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
 " }}}
 
-" vimtex (LaTeX) {{{
-let g:vimtex_view_method = 'skim' " Set PDF viewer
-" Use YouCompleteMe for autocompletion
-if !exists('g:ycm_semantic_triggers')
-    let g:ycm_semantic_triggers = {}
-endif
-" }}}
-
-" ghc-mod {{{
-map <silent> tw :GhcModTypeInsert<CR>
-map <silent> ts :GhcModSplitFunCase<CR>
-map <silent> tq :GhcModType<CR>
-map <silent> te :GhcModTypeClear<CR>
-" }}}
-
 " Vim Airline {{{
 set laststatus=2
 set ttimeoutlen=50
@@ -205,8 +196,9 @@ set writebackup
 
 " YouCompleteMeSettings {{{
 " Make sure YouCompleteMe uses the right python version
-nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible
-" let g:ycm_path_to_python_interpreter = '/Users/jeremymalloch/.pyenv/shims/python2'
+nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible, opening in a new window to the right
+nnoremap <leader>jf :YcmCompleter GetDoc<CR> " leader jf brings up the doc for whats under the cursor
+let g:ycm_python_binary_path = '/usr/local/bin/python3'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_min_num_of_chars_for_completion = 0
 let g:ycm_server_keep_logfiles = 1
@@ -217,21 +209,8 @@ let g:ycm_enable_diagnostic_signs=1
 let g:ycm_open_loclist_on_ycm_diags=1
 let g:ycm_show_diagnostics_ui=1
 let g:ycm_collect_identifiers_from_tags_files = 1
-" let g:ycm_filetype_blacklist={
-            " \ 'vim' : 1,
-            " \ 'tagbar' : 1,
-            " \ 'qf' : 1,
-            " \ 'notes' : 1,
-            " \ 'markdown' : 1,
-            " \ 'md' : 1,
-            " \ 'unite' : 1,
-            " \ 'text' : 1,
-            " \ 'vimwiki' : 1,
-            " \ 'pandoc' : 1,
-            " \ 'infolog' : 1,
-            " \ 'mail' : 1
-            " \}
-" " }}}
+let g:ycm_goto_buffer_command = 'split-or-existing-window' " Open definition in a new window unless file is already open
+" }}}
 
 " Functions {{{
 " toggle between number and relativenumber
