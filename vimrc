@@ -54,7 +54,7 @@ set backspace=indent,eol,start " Make sure backspace works properly
 " UI & Colourscheme {{{
 set relativenumber	" Show the number of lines above and below cursor line
 set number
-set background=dark
+set background=light
 let g:solarized_termcolors=256
 colorscheme solarized " Use solarized colourscheme
 set showcmd " Show the command being entered in the bottom
