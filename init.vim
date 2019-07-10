@@ -1,37 +1,21 @@
-" Jeremy Malloch
-"
-" Plugins (with Vundle) {{{
-" Start of Vundle settings
-set nocompatible              " be iMproved, instead of backwards compatible (with vi)
-filetype off                  " required
+" Plugins (with Plug) {{{
+call plug#begin('~/.local/share/nvim/plugged')
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+Plug 'tpope/vim-fugitive' " Git plugin
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'mbbill/undotree'
+Plug 'altercation/vim-colors-solarized' " Colour scheme plugin
+Plug 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
+Plug 'vim-airline/vim-airline-themes' " Themes for vim airline
+Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file search
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" Keep Plugin commands between vundle#begin/end.
-" Plugins from Github (format is user/repo)
-Plugin 'tpope/vim-fugitive' " Git plugin
-Plugin 'altercation/vim-colors-solarized' " Colour scheme plugin
-Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
-Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
-Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
-Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
-Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
-Plugin 'Valloric/YouCompleteMe' " Autocompletion
-Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
-" Plugin 'sjl/gundo.vim' " Vim undo tree visualization
-Plugin 'mbbill/undotree' " Vim undo tree visualization
-Plugin 'vim-scripts/indentpython.vim' " Better python indentation
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on
-syntax enable " enabling syntax processing
-" End of Vundle code
+" End of of Plug code
+" Initialize plugin system
+call plug#end()
 " }}}
 
 " System Settings {{{
@@ -94,7 +78,7 @@ nnoremap <leader>rl :call ToggleNumber()<CR> " Switch between absolute and relat
 " UndoTree Settings {{{
 nnoremap <leader>u :UndotreeToggle<CR>
 if has("persistent_undo")
-    set undodir=$HOME."/.undodir"
+    set undodir=$HOME"/.undodir"
     set undofile
 endif
 " }}}
@@ -194,22 +178,8 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set writebackup
 " }}}
 
-" YouCompleteMeSettings {{{
-" Make sure YouCompleteMe uses the right python version
-nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible, opening in a new window to the right
-nnoremap <leader>jf :YcmCompleter GetDoc<CR> " leader jf brings up the doc for whats under the cursor
-let g:ycm_python_binary_path = '/usr/local/bin/python3'
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_min_num_of_chars_for_completion = 0
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_min_num_identifier_candidate_chars = 1
-let g:ycm_enable_diagnostic_highlighting=1
-let g:ycm_enable_diagnostic_signs=1
-let g:ycm_open_loclist_on_ycm_diags=1
-let g:ycm_show_diagnostics_ui=1
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_goto_buffer_command = 'split-or-existing-window' " Open definition in a new window unless file is already open
+" Deoplete   {{{
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>" " Tab completion
 " }}}
 
 " Functions {{{
