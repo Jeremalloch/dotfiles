@@ -5,5 +5,13 @@ alias gaa='git add --all'
 alias gst='git status'
 alias gp='git push'
 alias gd='git diff'
-alias gbc='git branch | cat'
+alias gb='git branch | cat'
 alias gcm='git checkout master'
+alias gca='git commit --amend'
+
+# Unix
+alias ll='ls -l'
+
+# Apple Bazel
+alias bmac='bazel build --config=darwin-x86_64 //pdk/vintner/...'
+alias tmac='bazel test --config=darwin-x86_64 //pdk/vintner/...'
