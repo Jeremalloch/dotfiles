@@ -12,6 +12,5 @@ alias gca='git commit --amend'
 # Unix
 alias ll='ls -l'
 
-# Apple Bazel
-alias bmac='bazel build --config=darwin-x86_64 //pdk/vintner/...'
-alias tmac='bazel test --config=darwin-x86_64 //pdk/vintner/...'
+# Setting neovim as the default vim
+alias vim=nvim
