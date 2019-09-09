@@ -5,8 +5,12 @@ alias gaa='git add --all'
 alias gst='git status'
 alias gp='git push'
 alias gd='git diff'
-alias gbc='git branch | cat'
+alias gb='git branch | cat'
 alias gcm='git checkout master'
+alias gca='git commit --amend'
+
+# Unix
+alias ll='ls -l'
 
 # Setting neovim as the default vim
 alias vim=nvim
