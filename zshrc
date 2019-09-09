@@ -2,6 +2,17 @@
 export ZSH=${HOME}/.oh-my-zsh
 ZSH_DISABLE_COMPFIX=true
 
+# oh-my-zsh settings
+# Path to your oh-my-zsh installation.
+export ZSH=~/.oh-my-zsh
+ZSH_THEME=powerlevel10k/powerlevel10k
+HYPHEN_INSENSITIVE="true"
+# Automatically update oh-my-zsh without prompting
+DISABLE_UPDATE_PROMPT="true"
+# This makes repository status check for large repositories
+DISABLE_UNTRACKED_FILES_DIRTY="true" 
+source $ZSH/oh-my-zsh.sh
+
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
 
