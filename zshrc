@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=${HOME}/.oh-my-zsh
+ZSH_DISABLE_COMPFIX=true
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -9,40 +10,21 @@ ENABLE_CORRECTION="true"
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="mm/dd/yyyy"
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-export EDITOR='vim'
+export EDITOR="nvim"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-alias zshconfig="vim ~/.zshrc"
-alias ohmyzsh="vim ~/.oh-my-zsh"# Aliases
-alias clr='clear; ls -F'
-alias gtkk='git lg -10'
-alias g++14="clang -std=c++14 -Wall -g -v"
-eval "$(pyenv init -)"
+# Source the custom aliases
+source ~/.zsh_aliases
 
 # Set the theme and default user name
-ZSH_THEME=agnoster
 DEFAULT_USER="Jeremy Malloch"
 
-plugins=(git colored-man colorize pip python brew osx zsh-syntax-highlighting common-aliases)
-
-# Export paths
-export PATH="$HOME/Library/Haskell/bin:$PATH"
-
-# User configuration
-source $ZSH/oh-my-zsh.sh
-alias tmux="TERM=screen-256color-bce tmux"
-alias g++14="g++ -std=c++14 -Wall"
-
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/sbin:$PATH"

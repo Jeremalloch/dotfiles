@@ -1,0 +1,12 @@
+# Git aliases:
+alias gtkk='git lg -10'
+alias gau='git add -u'
+alias gaa='git add --all'
+alias gst='git status'
+alias gp='git push'
+alias gd='git diff'
+alias gbc='git branch | cat'
+alias gcm='git checkout master'
+
+# Setting neovim as the default vim
+alias vim=nvim
