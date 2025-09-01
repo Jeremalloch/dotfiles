@@ -11,6 +11,3 @@ alias gca='git commit --amend'
 
 # Unix
 alias ll='ls -l'
-
-# Setting neovim as the default vim
-alias vim=nvim

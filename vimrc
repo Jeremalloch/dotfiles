@@ -1,41 +1,43 @@
 " Jeremy Malloch
 "
-" Plugins (with Vundle) {{{
-" Start of Vundle settings
+" Plugins (with vim-plug) {{{
 set nocompatible              " be iMproved, instead of backwards compatible (with vi)
-filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Start of vim-plug settings
+call plug#begin('~/.vim/plugged')
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Essentials
+Plug 'tpope/vim-fugitive'                 " Git plugin
+Plug 'tpope/vim-surround'                  " Add/remove surrounding characters
+Plug 'mbbill/undotree'                     " Vim undo tree visualizatio
 
-" Keep Plugin commands between vundle#begin/end.
-" Plugins from Github (format is user/repo)
-Plugin 'tpope/vim-fugitive' " Git plugin
-Plugin 'altercation/vim-colors-solarized' " Colour scheme plugin
-Plugin 'vim-airline/vim-airline' " Status bar line at the bottom of the screen
-Plugin 'vim-airline/vim-airline-themes' " Themes for vim airline
-Plugin 'scrooloose/nerdtree' " Nerdtree for file browsing
-Plugin 'scrooloose/nerdcommenter' " Comment & uncomment code easily
-Plugin 'tpope/vim-surround' " Allows you to add or remove surrounding quotes
-Plugin 'Valloric/YouCompleteMe' " Autocompletion
-Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file search
-" Plugin 'sjl/gundo.vim' " Vim undo tree visualization
-Plugin 'mbbill/undotree' " Vim undo tree visualization
-Plugin 'vim-scripts/indentpython.vim' " Better python indentation
+" UI & Theme
+Plug 'altercation/vim-colors-solarized'    " Colour scheme plugin
+Plug 'vim-airline/vim-airline'             " Status bar
+Plug 'vim-airline/vim-airline-themes'      " Themes for vim airline
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+" File Navigation & Editing
+Plug 'preservim/nerdtree'                  " File tree explorer
+Plug 'preservim/nerdcommenter'             " Comment & uncomment easily
+Plug 'vim-scripts/indentpython.vim'        " Better python indentation
+
+" For Code Intelligence 
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" For Fuzzy Finding
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Initialize the plugin system
+call plug#end()
+
 filetype plugin indent on
 syntax enable " enabling syntax processing
-" End of Vundle code
+" End of vim-plug code
 " }}}
 
 " System Settings {{{
-set clipboard=unnamed
+set clipboard=unnamedplus
 " }}}
 
 " Tabs and spaces settings {{{
@@ -135,27 +137,15 @@ augroup END
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-    let g:ctrlp_use_caching = 0
     nnoremap <leader>g :vimgrep
 elseif executable('ag')
     set grepprg=ag\ --vimgrep\ --ignore=\"**.min.js\"
     set grepformat=%f:%l:%c:%m,%f:%l:%m
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-    let g:ctrlp_use_caching = 0
     nnoremap <leader>g :!Ag
 elseif executable('ack')
     set grepprg=ack\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
-" }}}
-
-" CtrlP settings {{{
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = '*.o'
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard'] "Ignore files in gitignore
 " }}}
 
 " NERDTree {{{
@@ -194,22 +184,26 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set writebackup
 " }}}
 
-" YouCompleteMeSettings {{{
-" Make sure YouCompleteMe uses the right python version
-nnoremap <leader>jd :YcmCompleter GoTo<CR> " leader jd goes to definition if possible, opening in a new window to the right
-nnoremap <leader>jf :YcmCompleter GetDoc<CR> " leader jf brings up the doc for whats under the cursor
-let g:ycm_python_binary_path = '/usr/local/bin/python3'
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_min_num_of_chars_for_completion = 0
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_min_num_identifier_candidate_chars = 1
-let g:ycm_enable_diagnostic_highlighting=1
-let g:ycm_enable_diagnostic_signs=1
-let g:ycm_open_loclist_on_ycm_diags=1
-let g:ycm_show_diagnostics_ui=1
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_goto_buffer_command = 'split-or-existing-window' " Open definition in a new window unless file is already open
+" FZF (FUZZY FINDER) SETTINGS {{{
+" <leader>ff to find files
+nnoremap <leader>ff :Files<CR>
+" <leader>fg to find files tracked by Git
+nnoremap <leader>fg :GFiles<CR>
+" <leader>gb to search buffers
+nnoremap <leader>fb :Buffers<CR>
+" <leader>rg to Ripgrep for content in files
+nnoremap <leader>rg :Rg<CR>
+" }}}
+
+" COC.NVIM (LSP CLIENT) SETTINGS {{{
+" Key mappings for LSP features
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use <leader>d for diagnostics
+nmap <leader>d <Plug>(coc-diagnostic-info)
 " }}}
 
 " Functions {{{
