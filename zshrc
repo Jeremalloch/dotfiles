@@ -23,6 +23,7 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH" # A common location for pipx and other tools
 [[ -d "/usr/local/sbin" ]] && export PATH="/usr/local/sbin:$PATH"
 [[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+[[ -d "$HOME/homebrew/bin" ]] && export PATH="$HOME/homebrew/bin:$PATH"
 
 # ------------------------------------------------------------------------------
 # 4. OH-MY-ZSH CONFIGURATION

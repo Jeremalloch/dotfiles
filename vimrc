@@ -37,7 +37,7 @@ syntax enable " enabling syntax processing
 " }}}
 
 " System Settings {{{
-set clipboard=unnamedplus
+set clipboard=unnamed
 " }}}
 
 " Tabs and spaces settings {{{
