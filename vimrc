@@ -132,22 +132,6 @@ augroup configgroup
 augroup END
 " }}}
 
-" Pick what search tool to use {{{
-" Searching with ripgrep, silver-searcher or ack depending what's installed
-if executable('rg')
-    set grepprg=rg\ --vimgrep
-    set grepformat=%f:%l:%c:%m
-    nnoremap <leader>g :vimgrep
-elseif executable('ag')
-    set grepprg=ag\ --vimgrep\ --ignore=\"**.min.js\"
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-    nnoremap <leader>g :!Ag
-elseif executable('ack')
-    set grepprg=ack\ --nogroup\ --nocolor\ --ignore-case\ --column
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-" }}}
-
 " NERDTree {{{
 " If no file specified, enter NERDTree on vim startup
 " autocmd StdinReadPre * let s:std_in=1
