@@ -229,7 +229,7 @@ com! WP call WordProcessorMode()
 "}}}
 
 " Git (Fugitive) Settings {{{
-nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gb :Git blame<CR>
 " }}}
 "
 " vim:foldmethod=marker:foldlevel=0
