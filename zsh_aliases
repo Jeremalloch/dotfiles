@@ -5,7 +5,7 @@ alias gaa='git add --all'
 alias gst='git status'
 alias gp='git push'
 alias gd='git diff'
-alias gb='git branch | cat'
+alias gb="git for-each-ref --sort=-committerdate refs/heads/ --format='%(color:cyan)%(committerdate:relative)%09%(color:reset)%(if)%(HEAD)%(then)%(color:bold blue) * %(refname:short)%(color:reset)%(else)  %(refname:short)%(end)'"
 alias gcm='git checkout master'
 alias gca='git commit --amend'
 
