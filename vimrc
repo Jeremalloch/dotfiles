@@ -19,7 +19,6 @@ Plug 'vim-airline/vim-airline-themes'      " Themes for vim airline
 " File Navigation & Editing
 Plug 'preservim/nerdtree'                  " File tree explorer
 Plug 'preservim/nerdcommenter'             " Comment & uncomment easily
-Plug 'vim-scripts/indentpython.vim'        " Better python indentation
 
 " For Code Intelligence 
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
