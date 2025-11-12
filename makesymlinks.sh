@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-# makesymlinks.sh — link dotfiles and set up zsh/oh-my-zsh/powerlevel10k
+# makesymlinks.sh — link dotfiles and set up zsh/oh-my-zsh/powerlevel10k + vim-plug
 set -euo pipefail
 
 #-----------------------------
 # Config
 #-----------------------------
-dir="${HOME}/dotfiles"           # dotfiles directory
-olddir="${HOME}/dotfiles_old"    # backup directory (created only if needed)
+dir="${HOME}/dotfiles"
+olddir="${HOME}/dotfiles_old"
 
-# List of files/folders in $dir to symlink into $HOME as dotfiles.
-# Removed: ycm_extra_conf.py, neovim. Keep this in sync with your repo.
 files=(
   "env.sh"
   "vimrc"
@@ -19,16 +17,8 @@ files=(
   "gitignore_global"
 )
 
-#-----------------------------
-# Helpers
-#-----------------------------
 say() { printf "%b\n" "==> $*"; }
 warn() { printf "%b\n" "!!  $*" >&2; }
-
-ensure_dir() {
-  local d="$1"
-  [ -d "$d" ] || mkdir -p "$d"
-}
 
 backup_dir_created=false
 maybe_create_backup_dir() {
@@ -49,9 +39,7 @@ backup_if_needed_and_link() {
     return 0
   fi
 
-  # If destination exists (file/dir/symlink), decide what to do
   if [ -e "$dst" ] || [ -L "$dst" ]; then
-    # If it's already the correct symlink, do nothing
     if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
       say "Already linked: ${dst} -> ${src}"
     else
@@ -67,24 +55,16 @@ backup_if_needed_and_link() {
   fi
 }
 
-#-----------------------------
-# Sanity check
-#-----------------------------
 if [ ! -d "$dir" ]; then
   warn "Dotfiles directory not found at ${dir}."
-  warn "Edit 'dir' at the top of this script or clone your repo to ${dir}."
   exit 1
 fi
 
-#-----------------------------
-# Create symlinks (with smart backups)
-#-----------------------------
 say "Linking dotfiles from ${dir} into ${HOME}"
 for file in "${files[@]}"; do
   backup_if_needed_and_link "$file"
 done
 
-# Configure Git global ignore if the file exists
 if [ -f "${HOME}/.gitignore_global" ]; then
   if git config --global --get core.excludesfile >/dev/null; then
     say "Git core.excludesfile already set to: $(git config --global --get core.excludesfile)"
@@ -95,14 +75,13 @@ if [ -f "${HOME}/.gitignore_global" ]; then
 fi
 
 #-----------------------------
-# Install / ensure zsh
+# Ensure zsh
 #-----------------------------
 install_zsh() {
   if command -v zsh >/dev/null 2>&1; then
     say "zsh already installed."
   else
-    local platform
-    platform="$(uname -s)"
+    local platform; platform="$(uname -s)"
     case "$platform" in
       Linux)
         if [ -f /etc/redhat-release ] || command -v dnf >/dev/null 2>&1; then
@@ -121,19 +100,15 @@ install_zsh() {
           warn "Homebrew not found. Install Homebrew or zsh manually: https://brew.sh"
         fi
         ;;
-      *)
-        warn "Unsupported platform: ${platform}. Install zsh manually."
-        ;;
+      *) warn "Unsupported platform: ${platform}. Install zsh manually." ;;
     esac
   fi
 
-  # Make zsh the default shell if it's not already
   if [ "${SHELL:-}" != "$(command -v zsh)" ] && command -v zsh >/dev/null 2>&1; then
     say "Changing default shell to zsh ..."
     chsh -s "$(command -v zsh)" || warn "Could not change default shell automatically."
   fi
 }
-
 install_zsh
 
 #-----------------------------
@@ -142,7 +117,7 @@ install_zsh
 install_oh_my_zsh() {
   local omz_dir="${HOME}/.oh-my-zsh"
   if [ -d "$omz_dir" ]; then
-    say "oh-my-zsh already present at ${omz_dir}"
+    say "oh-my-zsh already present."
     return
   fi
   if command -v curl >/dev/null 2>&1; then
@@ -157,11 +132,10 @@ install_oh_my_zsh() {
     warn "curl/wget not available—install oh-my-zsh manually."
   fi
 }
-
 install_oh_my_zsh
 
 #-----------------------------
-# powerlevel10k theme
+# powerlevel10k
 #-----------------------------
 install_powerlevel10k() {
   local omz_dir="${HOME}/.oh-my-zsh"
@@ -169,10 +143,9 @@ install_powerlevel10k() {
   local theme_dir="${custom}/themes/powerlevel10k"
 
   if [ ! -d "$omz_dir" ]; then
-    warn "oh-my-zsh not found—skipping powerlevel10k install."
+    warn "oh-my-zsh not found—skipping powerlevel10k."
     return
   fi
-
   if [ -d "$theme_dir" ]; then
     say "powerlevel10k already installed."
   else
@@ -180,37 +153,31 @@ install_powerlevel10k() {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$theme_dir"
   fi
 
-  # Ensure ZSH_THEME is set to powerlevel10k in ~/.zshrc (which is now symlinked)
   if [ -f "${HOME}/.zshrc" ]; then
     if grep -q '^ZSH_THEME=' "${HOME}/.zshrc"; then
       if grep -q '^ZSH_THEME="powerlevel10k/powerlevel10k"' "${HOME}/.zshrc"; then
         say "ZSH_THEME already set to powerlevel10k."
       else
-        say "Updating ZSH_THEME to powerlevel10k in .zshrc"
-        # Make an inline backup once; your script already backs up original .zshrc if it existed
+        say "Updating ZSH_THEME to powerlevel10k"
         sed -i.bak 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "${HOME}/.zshrc"
       fi
     else
       say "Adding ZSH_THEME to .zshrc"
       printf '\nZSH_THEME="powerlevel10k/powerlevel10k"\n' >> "${HOME}/.zshrc"
     fi
-  else
-    warn "~/.zshrc not found to configure theme (was it skipped?)."
   fi
 }
-
 install_powerlevel10k
 
 #-----------------------------
-# Ensure vim present (no Neovim)
+# Ensure vim (no neovim)
 #-----------------------------
 ensure_vim() {
   if command -v vim >/dev/null 2>&1; then
     say "vim is installed."
     return
   fi
-  local platform
-  platform="$(uname -s)"
+  local platform; platform="$(uname -s)"
   case "$platform" in
     Linux)
       if command -v dnf >/dev/null 2>&1; then
@@ -231,12 +198,47 @@ ensure_vim() {
         warn "Homebrew not found. Install Homebrew or vim manually."
       fi
       ;;
-    *)
-      warn "Unsupported platform: ${platform}. Install vim manually."
-      ;;
+    *) warn "Unsupported platform: ${platform}. Install vim manually." ;;
   esac
 }
 ensure_vim
+
+#-----------------------------
+# vim-plug bootstrap
+#-----------------------------
+install_vim_plug() {
+  local autoload="${HOME}/.vim/autoload"
+  local plug="${autoload}/plug.vim"
+  local plugged="${HOME}/.vim/plugged"
+
+  if [ -f "$plug" ]; then
+    say "vim-plug already installed."
+  else
+    say "Installing vim-plug to ${plug} ..."
+    mkdir -p "$autoload"
+    if command -v curl >/dev/null 2>&1; then
+      curl -fLo "$plug" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    elif command -v wget >/dev/null 2>&1; then
+      wget -qO "$plug" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    else
+      warn "curl/wget not available—cannot fetch vim-plug automatically."
+      return
+    fi
+  fi
+
+  # Ensure default plugin directory exists
+  mkdir -p "$plugged"
+
+  # If the vimrc uses vim-plug, install plugins non-interactively
+  if [ -f "${HOME}/.vimrc" ] && grep -q 'plug#begin' "${HOME}/.vimrc"; then
+    say "Running :PlugInstall ..."
+    # Use -E (compatible), -s (silent), -u uses given vimrc
+    vim -Es -u "${HOME}/.vimrc" +PlugInstall +qall || warn "PlugInstall returned non-zero (may be fine if no plugins defined)."
+  else
+    say "vim-plug installed. Define plugins in your vimrc using plug#begin()/plug#end() and run :PlugInstall."
+  fi
+}
+install_vim_plug
 
 say "All done!"
 if [ "$backup_dir_created" = true ]; then
