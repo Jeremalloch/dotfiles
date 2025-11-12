@@ -14,6 +14,13 @@ export LANG="en_US.UTF-8"
 export EDITOR="vim"
 export PYENV_ROOT="$HOME/.pyenv"
 
+# Helper: detect Docker/container
+is_docker() {
+  [[ -f "/.dockerenv" ]] && return 0
+  grep -qiE '(docker|lxc|containerd|podman)' /proc/1/cgroup 2>/dev/null && return 0
+  return 1
+}
+
 # ------------------------------------------------------------------------------
 # 3. PATH MANAGEMENT
 #    - All PATH modifications are consolidated here for clarity.
@@ -25,8 +32,16 @@ export PATH="$HOME/.local/bin:$PATH" # A common location for pipx and other tool
 [[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 [[ -d "$HOME/homebrew/bin" ]] && export PATH="$HOME/homebrew/bin:$PATH"
 
-# >>> Homebrew Configuration (Added below)
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# >>> Homebrew Configuration (guarded)
+# Initialize Homebrew only if it's installed.
+if [[ -x "/opt/homebrew/bin/brew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x "/usr/local/bin/brew" ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif command -v brew >/dev/null 2>&1; then
+  # Covers Linuxbrew (e.g., /home/linuxbrew/.linuxbrew/bin/brew) or custom installs
+  eval "$(brew shellenv)"
+fi
 # <<< Homebrew Configuration
 
 # ------------------------------------------------------------------------------
@@ -64,8 +79,10 @@ source "$ZSH/oh-my-zsh.sh"
 # ------------------------------------------------------------------------------
 
 # Pyenv (Python Version Management)
-# The `pyenv init -` command sets up shims and command completion.
-eval "$(pyenv init -)"
+# Skip inside Docker; only init if pyenv is available.
+if command -v pyenv >/dev/null 2>&1 && ! is_docker; then
+  eval "$(pyenv init -)"
+fi
 
 # Google Cloud SDK
 # IMPORTANT: Move your SDK out of Downloads!
@@ -94,3 +111,4 @@ fi
 
 # Check if anything is running before we close a shell
 setopt CHECK_JOBS
+
