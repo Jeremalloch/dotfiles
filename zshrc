@@ -25,6 +25,10 @@ export PATH="$HOME/.local/bin:$PATH" # A common location for pipx and other tool
 [[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 [[ -d "$HOME/homebrew/bin" ]] && export PATH="$HOME/homebrew/bin:$PATH"
 
+# >>> Homebrew Configuration (Added below)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+# <<< Homebrew Configuration
+
 # ------------------------------------------------------------------------------
 # 4. OH-MY-ZSH CONFIGURATION
 #    - All OMZ settings must be defined *before* sourcing oh-my-zsh.sh.
@@ -87,3 +91,6 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Check if anything is running before we close a shell
+setopt CHECK_JOBS
