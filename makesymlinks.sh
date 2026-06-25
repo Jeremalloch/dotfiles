@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# makesymlinks.sh — link dotfiles and set up zsh/oh-my-zsh/powerlevel10k + vim-plug
+# makesymlinks.sh - link dotfiles and set up zsh, vim, and neovim
 set -euo pipefail
 
 #-----------------------------
@@ -55,6 +55,35 @@ backup_if_needed_and_link() {
   fi
 }
 
+backup_config_dir_if_needed_and_link() {
+  local name="$1"
+  local src="${dir}/${name}"
+  local config_dir="${HOME}/.config"
+  local dst="${config_dir}/${name}"
+
+  if [ ! -e "$src" ] && [ ! -L "$src" ]; then
+    warn "Skipping '${name}': not found in ${dir}."
+    return 0
+  fi
+
+  mkdir -p "$config_dir"
+
+  if [ -e "$dst" ] || [ -L "$dst" ]; then
+    if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+      say "Already linked: ${dst} -> ${src}"
+    else
+      maybe_create_backup_dir
+      say "Backing up existing ${dst} -> ${olddir}/"
+      mv -f "$dst" "$olddir"/
+      ln -sfn "$src" "$dst"
+      say "Linked ${dst} -> ${src}"
+    fi
+  else
+    ln -sfn "$src" "$dst"
+    say "Linked ${dst} -> ${src}"
+  fi
+}
+
 if [ ! -d "$dir" ]; then
   warn "Dotfiles directory not found at ${dir}."
   exit 1
@@ -64,6 +93,7 @@ say "Linking dotfiles from ${dir} into ${HOME}"
 for file in "${files[@]}"; do
   backup_if_needed_and_link "$file"
 done
+backup_config_dir_if_needed_and_link "nvim"
 
 if [ -f "${HOME}/.gitignore_global" ]; then
   if git config --global --get core.excludesfile >/dev/null; then
@@ -170,7 +200,7 @@ install_powerlevel10k() {
 install_powerlevel10k
 
 #-----------------------------
-# Ensure vim (no neovim)
+# Ensure vim
 #-----------------------------
 ensure_vim() {
   if command -v vim >/dev/null 2>&1; then
@@ -202,6 +232,74 @@ ensure_vim() {
   esac
 }
 ensure_vim
+
+#-----------------------------
+# Ensure neovim
+#-----------------------------
+ensure_neovim() {
+  if command -v nvim >/dev/null 2>&1; then
+    say "neovim is installed."
+    return
+  fi
+  local platform; platform="$(uname -s)"
+  case "$platform" in
+    Linux)
+      if command -v dnf >/dev/null 2>&1; then
+        sudo dnf -y install neovim
+      elif command -v yum >/dev/null 2>&1; then
+        sudo yum -y install neovim
+      elif command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update -y
+        sudo apt-get install -y neovim
+      else
+        warn "Unknown Linux package manager - install neovim manually."
+      fi
+      ;;
+    Darwin)
+      if command -v brew >/dev/null 2>&1; then
+        brew install neovim
+      else
+        warn "Homebrew not found. Install Homebrew or neovim manually."
+      fi
+      ;;
+    *) warn "Unsupported platform: ${platform}. Install neovim manually." ;;
+  esac
+}
+ensure_neovim
+
+#-----------------------------
+# Ensure tree-sitter CLI
+#-----------------------------
+ensure_tree_sitter_cli() {
+  if command -v tree-sitter >/dev/null 2>&1; then
+    say "tree-sitter CLI is installed."
+    return
+  fi
+  local platform; platform="$(uname -s)"
+  case "$platform" in
+    Linux)
+      if command -v dnf >/dev/null 2>&1; then
+        sudo dnf -y install tree-sitter-cli || sudo dnf -y install tree-sitter
+      elif command -v yum >/dev/null 2>&1; then
+        sudo yum -y install tree-sitter-cli || sudo yum -y install tree-sitter
+      elif command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update -y
+        sudo apt-get install -y tree-sitter-cli || sudo apt-get install -y tree-sitter
+      else
+        warn "Unknown Linux package manager - install tree-sitter CLI manually."
+      fi
+      ;;
+    Darwin)
+      if command -v brew >/dev/null 2>&1; then
+        brew install tree-sitter-cli
+      else
+        warn "Homebrew not found. Install Homebrew or tree-sitter CLI manually."
+      fi
+      ;;
+    *) warn "Unsupported platform: ${platform}. Install tree-sitter CLI manually." ;;
+  esac
+}
+ensure_tree_sitter_cli
 
 #-----------------------------
 # vim-plug bootstrap
@@ -240,8 +338,18 @@ install_vim_plug() {
 }
 install_vim_plug
 
+install_neovim_plugins() {
+  if command -v nvim >/dev/null 2>&1 && [ -f "${HOME}/.config/nvim/init.lua" ]; then
+    say "Running :Lazy sync for neovim ..."
+    nvim --headless "+Lazy! sync" +qa || warn "Lazy sync returned non-zero. Open nvim and run :Lazy sync for details."
+    local lsp_servers=(bashls jsonls lua_ls pyright ruff ts_ls yamlls)
+    say "Installing Neovim language servers ..."
+    nvim --headless "+LspInstall ${lsp_servers[*]}" +qa || warn "LspInstall returned non-zero. Open nvim and run :LspInstall for details."
+  fi
+}
+install_neovim_plugins
+
 say "All done!"
 if [ "$backup_dir_created" = true ]; then
   say "Backups saved in ${olddir}"
 fi
-
